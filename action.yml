@@ -1,0 +1,38 @@
+name: "Update JIRA Version in Tickets"
+description: "Reads the changelog to extract JIRA tickets and set the specified version."
+author: "Your Name or Company"
+inputs:
+  jira_version:
+    description: "The JIRA version to set on tickets."
+    required: true
+  changelog_path:
+    description: "The path to the changelog file."
+    default: "CHANGELOG.md"
+    required: false
+  ticket_regex:
+    description: "The regex pattern to match JIRA tickets."
+    default: "([A-Z]+-[0-9]+)"
+    required: false
+secrets:
+  jira_base_url:
+    description: "The base URL of the JIRA instance."
+    required: true
+  jira_username:
+    description: "JIRA username or email for API access."
+    required: true
+  jira_api_token:
+    description: "API token for authenticating with JIRA."
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    JIRA_VERSION: ${{ inputs.jira_version }}
+    CHANGELOG_PATH: ${{ inputs.changelog_path }}
+    TICKET_REGEX: ${{ inputs.ticket_regex }}
+    JIRA_BASE_URL: ${{ secrets.jira_base_url }}
+    JIRA_USERNAME: ${{ secrets.jira_username }}
+    JIRA_API_TOKEN: ${{ secrets.jira_api_token }}
+branding:
+  icon: "check-circle"
+  color: "green"
